@@ -1,0 +1,17 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+.position{
+	margin-top: 10px;
+}
+.users{
+	height: 450px;
+}
+.chat{
+	height: 563px;
+}
+.input-postion{
+	position: relative;
+	top: 95%;
+}
