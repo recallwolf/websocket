@@ -7,11 +7,41 @@
 }
 .users{
 	height: 450px;
+	overflow-y: auto;
 }
 .chat{
 	height: 563px;
 }
 .input-postion{
 	position: relative;
-	top: 95%;
+	top: 3px;
+}
+.chat-msg{
+	position: relative;
+	height: 500px;
+	overflow-y: auto;
+	margin-bottom: 5px;
+}
+.chat-content{
+	border: 3px solid #3498db;
+	border-radius: 5px;
+	margin-top: 15px;
+	margin-bottom: 25px;
+	font-size: 17px;
+}
+.chat-content-heading{
+	margin-top: -13px;
+	margin-left: 15px;
+	width: 200px;
+	border-radius: 5px;
+}
+.span-style{
+	margin-right: 10px;
+}
+.chat-content-body{
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	overflow-x: auto;
 }
