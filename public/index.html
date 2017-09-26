@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Socket.IO chat</title>
@@ -29,13 +29,14 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-9">
+        <div class="col-sm-9" id="message">
           <div class="panel panel-info">
             <div class="panel-heading">
               CHAT
             </div>
             <div class="panel-body chat">
               <div class="chat-msg">
+                <chat v-bind:chatmsgs="chatmsgs" v-for="(chatmsg,index) in chatmsgs" key="index"></chat>
                 <div class="chat-content col-sm-11">
                   <div class="chat-content-heading">
                     <span class="label label-danger span-style"><i class="glyphicon glyphicon-info-sign">提示信息</i></span>
@@ -69,12 +70,12 @@
   </script> 
   <script src="https://unpkg.com/vue"></script>
   <script>
-    var socket = io.connection('http://localhost:3000');
+    var socket = io.connect('http://localhost:3000');
     
 
-    Vue.compoent(chat, {
-      props: ['chatmsg'],
-      template: '',
+    Vue.component('chat', {
+      props: ['chatmsgs'],
+      template: '<div class="chat-content col-sm-11"><div class="chat-content-heading"><span class="label label-danger span-style"><i class="glyphicon glyphicon-info-sign">提示信息</i></span><span class="label label-danger span-style"> <i class="glyphicon glyphicon-time">00:00:00</i></span></div><div class="chat-content-body">{{chatmsg.msg}}</div></div>',
     })
     var vm =new Vue({
       el: '#message',
@@ -84,9 +85,10 @@
       },
       methods:{},
     })
-    socket.on('chat message', function(msg){
-      vm.chatmsgs.push({chat: msg});
+    socket.on('open', function(msg){
+      alert('welcome');
     });
+    socket.on()
   </script>
   
   </body>

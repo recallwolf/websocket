@@ -7,14 +7,12 @@ var io = require('socket.io')(http);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function(req, res){
-	res.render
-app.get('/', function(req, res){
-	res.sendFile(__dirname + '/index.html');
-});('index');
+	res.render('index');
 });
 
 io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
+	socket.emit('open');
+  	socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
 });
