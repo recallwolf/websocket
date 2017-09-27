@@ -14,7 +14,10 @@ io.on('connection', function(socket){
 	socket.emit('open');
   	socket.on('chat message', function(msg){
     	io.emit('chat message', msg);
-  });
+  	});
+  	socket.on('nickname', function(msg){
+    	io.emit('nickname', msg);
+  	});
 });
 
 http.listen(3000, function(){

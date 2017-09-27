@@ -12,30 +12,26 @@
 .chat{
 	height: 563px;
 }
-.input-postion{
-	position: relative;
-	top: 3px;
-}
 .chat-msg{
 	position: relative;
 	height: 500px;
 	overflow-y: auto;
 	margin-bottom: 5px;
 }
-.chat-content{
+.chat-content-others{
 	border: 3px solid #3498db;
 	border-radius: 5px;
 	margin-top: 15px;
 	margin-bottom: 25px;
 	font-size: 17px;
 }
-.chat-content-heading{
+.chat-content-heading-others{
 	margin-top: -13px;
 	margin-left: 15px;
-	width: 200px;
+	width: 210px;
 	border-radius: 5px;
 }
-.span-style{
+.span-style-others{
 	margin-right: 10px;
 }
 .chat-content-body{
@@ -44,4 +40,16 @@
 	margin-top: 15px;
 	margin-bottom: 15px;
 	overflow-x: auto;
+}
+.input-nickname-postion{
+	position: absolute;
+	top: 250px;
+}
+.nickname-input{
+	font-size: 25px;
+	height: 60px;
+}
+.bg{
+	background-color: #66CCFF;
+	height: 662px;
 }

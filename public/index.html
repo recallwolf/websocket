@@ -6,82 +6,125 @@
     <link rel="stylesheet" href="stylesheets\main.css">
   </head>
   <body>
-    <div class="container position">
-      <div class="row">
-        <div class="col-sm-3">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              User chat message
-            </div>
-            <div class="panel-body">
-              Nikename: recallwolf
-            </div>
-          </div>
-          <div class="panel panel-success">
-            <div class="panel-heading">
-              Users in room
-            </div>
-            <div class="panel-body users">
-              <ul class="list-group">
-                <li class="list-group-item">USER 1</li>
-                <li class="list-group-item">USER 2</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-9" id="message">
-          <div class="panel panel-info">
-            <div class="panel-heading">
-              CHAT
-            </div>
-            <div class="panel-body chat">
-              <div class="chat-msg">
-                <chat v-bind:chatmsg="chatmsg" v-for="chatmsg in chatmsgs" key="chatmsg.id"></chat>
-              </div>
-              <div class="input-group input-postion">
-                <input type="text" class="form-control" v-model="message" v-on:keyup.enter="add">
+    <div id="message">
+      <div class="container-fluid" v-if="show">
+        <div class="row">
+          <div class="col-sm-12 bg">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+              <div class="input-group input-nickname-postion">
+                <input type="text" placeholder="INPUT YOUR NICKNAME" class="form-control nickname-input" v-model="nickname" v-on:keyup.enter="showchat">
                 <span class="input-group-btn" id="basic-addon1">
-                <button class="btn btn-info" type="button" v-on:click="add">Go <i class="glyphicon glyphicon-send"></i></button>
+                <button class="btn btn-success nickname-input" type="button" v-on:click="showchat">Go <i class="glyphicon glyphicon-send"></i></button>
                 </span>
               </div>
             </div>
+            <div class="col-sm-3"></div>
+          </div>
+        </div>
+      </div>
+      <div class="container position" v-if="!show">
+        <div class="row">
+          <div class="col-sm-3">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                User info
+              </div>
+              <div class="panel-body">
+                <p><i class="glyphicon glyphicon-user">&nbsp{{nickname}}</i></p>
+              </div>
+            </div>
+            <div class="panel panel-success">
+              <div class="panel-heading">
+                Users in room
+              </div>
+              <div class="panel-body users">
+                <ul class="list-group">
+                  <chatman v-bind:user="user" v-for="(user,index) in users" key="index"></chatman>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-9" >
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                CHAT
+              </div>
+            </div>
+              <div class="panel-body chat">
+                <div class="chat-msg">
+                  <chat v-bind:chatmsg="chatmsg" v-for="chatmsg in chatmsgs" key="chatmsg.id"></chat>
+                </div>
+                <div class="input-group input-postion">
+                  <input type="text" class="form-control" v-model="message" v-on:keyup.enter="addMessage">
+                  <span class="input-group-btn" id="basic-addon1">
+                  <button class="btn btn-info" type="button" v-on:click="addMessage">Go <i class="glyphicon glyphicon-send"></i></button>
+                  </span>
+                </div>
+              </div>
+          </div>
+        </div>
       </div>
     </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js">
-  </script> 
-  <script src="https://unpkg.com/vue"></script>
-  <script>
-    var socket = io.connect('http://localhost:3000');
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js">
+    </script> 
+    <script src="javascripts\vue.js"></script>
+    <script>
+      var socket = io.connect('http://localhost:3000');
+      
 
-    Vue.component('chat', {
-      props: ['chatmsg'],
-      template: '<div class="chat-content col-sm-11"><div class="chat-content-heading"><span class="label label-danger span-style"><i class="glyphicon glyphicon-info-sign">提示信息</i></span><span class="label label-danger span-style"> <i class="glyphicon glyphicon-time">00:00:00</i></span></div><div class="chat-content-body">{{chatmsg.msg}}</div></div>',
-    })
-    var vm =new Vue({
-      el: '#message',
-      data:{
-        chatmsgs: [],
-        users: 0,
-        nextId: 0,
-        message: "",
-      },
-      methods:{
-        add: function(){
-          socket.emit('chat message', this.message);
-          this.message = "";
+      Vue.component('chat', {
+        props: ['chatmsg'],
+        template: '<div class="chat-content-others col-sm-11"><div class="chat-content-heading-others"><span class="label label-info span-style-others"><i class="glyphicon glyphicon-user">&nbsp{{chatmsg.user}}</i></span> <span class="label label-danger span-style-others"><i class="glyphicon glyphicon-time">&nbsp{{chatmsg.time}}</i></span></div><div class="chat-content-body">{{chatmsg.msg}}</div></div>',
+      })
+      Vue.component('chatman',{
+        props: ['user'],
+        template: '<li class="list-group-item"><i class="glyphicon glyphicon-user">&nbsp&nbsp{{user.nickname}}</i></li>',
+      })
+      var vm =new Vue({
+        el: '#message',
+        data:{
+          chatmsgs: [],
+          users: [],
+          nextId: 0,
+          message: "",
+          show: true,
+          nickname: "",
         },
-      }
-    })
+        methods:{
+          addMessage: function(){
+            if(this.message != ""){
+              socket.emit('chat message', this.message);
+              this.message = "";
+            } 
+          },
+          getDate: function(){
+            var date = new Date();
+            var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+            return time;
+          },
+          showchat: function(){
+            if(this.nickname != ""){
+              socket.emit('nickname', this.nickname);
+              this.show = !this.show;
+            }
+          }
+        }
+      })
+      
+      
 
-    socket.on('open', function(msg){
-      vm.chatmsgs.push({msg: 'welcome'});
-    });
-    socket.on('chat message', function(msg){
-      vm.chatmsgs.push({id: vm.nextId++ ,msg: msg});
-    });
-  </script>
+      socket.on('open', function(msg){
+        vm.chatmsgs.push({msg: 'welcome',time: vm.getDate(),user: "系统消息"});
+      });
+      socket.on('chat message', function(msg){
+        vm.chatmsgs.push({id: vm.nextId++ ,msg: msg, time: vm.getDate(), user: vm.nickname});
+      });
+      socket.on('nickname', function(msg){
+        vm.users.push({nickname: msg});
+      });
+    </script>
   
   </body>
 </html>
