@@ -10,13 +10,19 @@ app.get('/', function(req, res){
 	res.render('index');
 });
 
+var onlineUser = [];
+  		
+
 io.on('connection', function(socket){
-	socket.emit('open');
-  	socket.on('chat message', function(msg){
-    	io.emit('chat message', msg);
+	socket.on('online',function(msg){
+		io.emit('online', msg);
+	});
+  	socket.on('chat message', function(msg,nickname){
+    	io.emit('chat message', msg,nickname);
   	});
-  	socket.on('nickname', function(msg){
-    	io.emit('nickname', msg);
+  	socket.on('onlineuser', function(nickname){
+  		onlineUser.push({nickname: nickname});
+    	io.emit('onlineuser',onlineUser);
   	});
 });
 

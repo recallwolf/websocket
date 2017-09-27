@@ -36,7 +36,7 @@
             </div>
             <div class="panel panel-success">
               <div class="panel-heading">
-                Users in room
+                Online User
               </div>
               <div class="panel-body users">
                 <ul class="list-group">
@@ -95,18 +95,19 @@
         methods:{
           addMessage: function(){
             if(this.message != ""){
-              socket.emit('chat message', this.message);
+              socket.emit('chat message', this.message,this.nickname);
               this.message = "";
             } 
           },
           getDate: function(){
             var date = new Date();
-            var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+            var time = date.toLocaleTimeString(); ;
             return time;
           },
           showchat: function(){
             if(this.nickname != ""){
-              socket.emit('nickname', this.nickname);
+              socket.emit('online', this.nickname);
+              socket.emit('onlineuser', this.nickname);
               this.show = !this.show;
             }
           }
@@ -115,14 +116,14 @@
       
       
 
-      socket.on('open', function(msg){
-        vm.chatmsgs.push({msg: 'welcome',time: vm.getDate(),user: "系统消息"});
+      socket.on('online', function(msg){
+        vm.chatmsgs.push({msg: 'Welcome' + '[' + msg + ']',time: vm.getDate(),user: "系统消息"});
       });
-      socket.on('chat message', function(msg){
-        vm.chatmsgs.push({id: vm.nextId++ ,msg: msg, time: vm.getDate(), user: vm.nickname});
+      socket.on('chat message', function(msg,nickname){
+        vm.chatmsgs.push({id: vm.nextId++ ,msg: msg, time: vm.getDate(), user: nickname});
       });
-      socket.on('nickname', function(msg){
-        vm.users.push({nickname: msg});
+      socket.on('onlineuser', function(onlineUser){
+        vm.users = onlineUser;
       });
     </script>
   
