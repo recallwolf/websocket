@@ -12,9 +12,11 @@ app.get('/', function(req, res){
 
 var onlineUser = [];
   		
+var user = '';
 
 io.on('connection', function(socket){
 	socket.on('online',function(msg){
+		user = msg;
 		io.emit('online', msg);
 	});
   	socket.on('chat message', function(msg,nickname){
@@ -24,8 +26,10 @@ io.on('connection', function(socket){
   		onlineUser.push({nickname: nickname});
     	io.emit('onlineuser',onlineUser);
   	});
+  	socket.on('disconnect', function(){
+  		socket.broadcast.emit('userleft', user);
+  	});
 });
-
 http.listen(3000, function(){
 	console.log('listening on *:3000');
 });
