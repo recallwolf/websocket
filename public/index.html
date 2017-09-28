@@ -43,6 +43,7 @@
                   <chatman v-bind:user="user" v-for="(user,index) in users" key="index"></chatman>
                 </ul>
               </div>
+              <div class="panel-footer"><h5>在线人数<span class="badge online">{{onlineNum}}</span></h5></div>
             </div>
           </div>
           <div class="col-sm-9" >
@@ -52,7 +53,7 @@
               </div>
             </div>
               <div class="panel-body chat">
-                <div class="chat-msg">
+                <div class="chat-msg" id="chatscroll">
                   <chat v-bind:chatmsg="chatmsg" v-for="chatmsg in chatmsgs" key="chatmsg.id"></chat>
                 </div>
                 <div class="input-group input-postion">
@@ -91,6 +92,15 @@
           message: "",
           show: true,
           nickname: "",
+          onlineNum: 0,
+        },
+        watch:{
+          chatmsgs(){
+            this.$nextTick(function(){
+              var chat = document.getElementById('chatscroll');
+              chat.scrollTop = chat.scrollHeight;
+            })
+          }       
         },
         methods:{
           addMessage: function(){
@@ -116,8 +126,9 @@
       
       
 
-      socket.on('online', function(msg){
+      socket.on('online', function(msg,num){
         vm.chatmsgs.push({msg: 'Welcome' + '[' + msg + ']',time: vm.getDate(),user: "系统消息"});
+        vm.onlineNum = num;
       });
       socket.on('chat message', function(msg,nickname){
         vm.chatmsgs.push({id: vm.nextId++ ,msg: msg, time: vm.getDate(), user: nickname});
@@ -125,13 +136,15 @@
       socket.on('onlineuser', function(onlineUser){
         vm.users = onlineUser;
       });
-      socket.on('userleft', function(msg,onlineUser){
-        vm.chatmsgs.push({msg : '[' + msg + ']' + '下线了', time: vm.getDate(),user: "系统消息"})
-        vm.users = onlineUser;
+      socket.on('userleft', function(msg, onlineUser, num){
+        vm.chatmsgs.push({msg : '[' + msg + ']' + '下线了', time: vm.getDate(),user: "系统消息"});
+        vm.users = onlineUser
+        vm.onlineNum = num;
       });
       socket.on('disconnect', function(){
         console.log('离线了');
       });
+
     </script>
   
   </body>

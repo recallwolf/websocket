@@ -11,12 +11,13 @@ app.get('/', function(req, res){
 });
 
 var onlineUser = [];
- 
+var num = 0;
 
 io.on('connection', function(socket){
+	num++;
 	socket.on('online',function(msg){
 		socket.name = msg;
-		io.emit('online', msg);
+		io.emit('online', msg,num);
 	});
   	socket.on('chat message', function(msg,nickname){
     	io.emit('chat message', msg,nickname);
@@ -26,14 +27,15 @@ io.on('connection', function(socket){
     	io.emit('onlineuser',onlineUser);
   	});
   	socket.on('disconnect', function(){
-  		if(onlineUser!=[]){
+  		if(onlineUser!=[]&&num >= 0){
+  			num--;
   			var index = onlineUser.findIndex(function(value){
   				return  value.nickname === socket.name;
   			});
   			onlineUser.splice(index, 1);
   			console.log(onlineUser);
   		}
-  		socket.broadcast.emit('userleft', socket.name,onlineUser);
+  		socket.broadcast.emit('userleft', socket.name,onlineUser,num);
   	});
 });
 

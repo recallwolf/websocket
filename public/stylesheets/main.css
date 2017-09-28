@@ -7,8 +7,11 @@
 	margin-top: 10px;
 }
 .users{
-	height: 450px;
+	height: 400px;
 	overflow-y: auto;
+}
+.online{
+	margin-left: 150px;
 }
 .chat{
 	height: 563px;
