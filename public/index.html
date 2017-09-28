@@ -125,8 +125,9 @@
       socket.on('onlineuser', function(onlineUser){
         vm.users = onlineUser;
       });
-      socket.on('userleft', function(msg){
+      socket.on('userleft', function(msg,onlineUser){
         vm.chatmsgs.push({msg : '[' + msg + ']' + '下线了', time: vm.getDate(),user: "系统消息"})
+        vm.users = onlineUser;
       });
       socket.on('disconnect', function(){
         console.log('离线了');
