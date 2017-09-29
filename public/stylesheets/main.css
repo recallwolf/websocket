@@ -3,6 +3,9 @@
 	margin: 0;
 	font-family: Microsoft YaHei;
 }
+body{
+	height: 100%;
+}
 .position{
 	margin-top: 10px;
 }
@@ -45,10 +48,9 @@
 	margin-bottom: 15px;
 	overflow-x: auto;
 }
-
 .input-nickname-postion{
 	position: absolute;
-	top: 250px;
+	top: 270px;
 }
 .nickname-input{
 	font-size: 25px;
@@ -56,12 +58,12 @@
 }
 .bg{
 	background-color: #66CCFF;
-	height: 662px;
+	height: 758px;
 }
 .choosefile{
 	width: 100%;
 	background-color: #55d98d;
-	border-radius: 6px;
+	border-radius: 3px;
 	height: 37px;
 }
 .btn-pos{

@@ -154,7 +154,7 @@
       });
       socket.on('userleft', function(msg, onlineUser, num){
         vm.chatmsgs.push({msg : '[' + msg + ']' + '下线了', time: vm.getDate(),user: "系统消息"});
-        vm.users = onlineUser
+        vm.users = onlineUser;
         vm.onlineNum = num;
       });
       socket.on('disconnect', function(){
