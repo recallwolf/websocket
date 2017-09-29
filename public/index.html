@@ -64,16 +64,12 @@
                   <button class="btn btn-info" type="button" v-on:click="addMessage">Go<i class="glyphicon glyphicon-send"></i></button>
                   </span>
                 </div>
-                <div class="col-sm-12 choosefile" v-if="display">
-                  <div class="col-sm-6 text-center">
-                  <label class="btn">
-                    <input type="file" name="">
-                  </label>
-                  </div>
-                  <div class="col-sm-6 btn-pos text-right">
-                    <button class="btn btn-default">Submit</button>
-                    <button class="btn btn-default" v-on:click="showfile">Cancel</button>
-                  </div>
+                <div class="input-group bgchoosefile col-sm-2" v-if="display">
+                  <input class="choosefile" type="file" id="files">
+                  <span class="input-group-btn">
+                  <button class="btn btn-primary" v-on:click="sendfile">Submit</button>
+                  <button class="btn btn-danger" v-on:click="showfile">Cancel</button>
+                  </span>
                 </div>
               </div>
             </div>
@@ -90,7 +86,7 @@
 
       Vue.component('chat', {
         props: ['chatmsg'],
-        template: '<div class="chat-content-others col-sm-11"><div class="chat-content-heading-others"><span class="label label-info span-style-others"><i class="glyphicon glyphicon-user">&nbsp{{chatmsg.user}}</i></span> <span class="label label-danger span-style-others"><i class="glyphicon glyphicon-time">&nbsp{{chatmsg.time}}</i></span></div><div class="chat-content-body">{{chatmsg.msg}}</div></div>',
+        template: '<div class="chat-content-others col-sm-11"><div class="chat-content-heading-others"><span class="label label-info span-style-others"><i class="glyphicon glyphicon-user">&nbsp{{chatmsg.user}}</i></span> <span class="label label-danger span-style-others"><i class="glyphicon glyphicon-time">&nbsp{{chatmsg.time}}</i></span></div><div class="chat-content-body" v-html="chatmsg.msg">{{chatmsg.msg}}</div></div>',
       })
       Vue.component('chatman',{
         props: ['user'],
@@ -137,6 +133,13 @@
           },
           showfile: function(){
             this.display = !this.display;
+          },
+          sendfile: function(){
+            var files = document.getElementById('files').files;
+            if(files.length != 0){
+              var file = files[0];
+              socket.emit('sendfile', this.nickname, file, file.name);
+            }
           }
         }
       })
@@ -152,13 +155,17 @@
       socket.on('onlineuser', function(onlineUser){
         vm.users = onlineUser;
       });
+      socket.on('sendfile', function(nickname, filename){
+        var msg = '文件:  <a href="/files/'+ filename + '"' + '>' + filename +'</a>'
+        vm.chatmsgs.push({msg: msg, time: vm.getDate(), user: nickname});
+      });
       socket.on('userleft', function(msg, onlineUser, num){
         vm.chatmsgs.push({msg : '[' + msg + ']' + '下线了', time: vm.getDate(),user: "系统消息"});
         vm.users = onlineUser;
         vm.onlineNum = num;
       });
       socket.on('disconnect', function(){
-        console.log('离线了');
+        console.log('用户已离线');
       });
 
     </script>

@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var path = require('path');
+var fs = require('fs');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -25,6 +26,13 @@ io.on('connection', function(socket){
   	socket.on('onlineuser', function(nickname){
   		onlineUser.push({nickname: nickname});
     	io.emit('onlineuser',onlineUser);
+  	});
+  	socket.on('sendfile', function(nickname,file,filename){
+      var rawPath = './public/files/' + filename;
+  		var filePath = path.resolve(__dirname, rawPath);
+      console.log(filePath);
+  		fs.writeFileSync(filePath, file, 'binary');
+  		io.emit('sendfile', nickname, filename);
   	});
   	socket.on('disconnect', function(){
   		num--;

@@ -14,7 +14,8 @@ body{
 	overflow-y: auto;
 }
 .online{
-	margin-left: 150px;
+	position: relative;
+	left: 65%;
 }
 .chat{
 	height: 563px;
@@ -61,11 +62,11 @@ body{
 	height: 758px;
 }
 .choosefile{
-	width: 100%;
-	background-color: #55d98d;
+	margin-left: 10px;
+	margin-top: 4px;
+}
+.bgchoosefile{
+	background-color: #bdc3c7;
 	border-radius: 3px;
-	height: 37px;
 }
-.btn-pos{
-	margin-top: 1.5px;
-}
+
