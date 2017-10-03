@@ -90,7 +90,7 @@
       })
       Vue.component('chatman',{
         props: ['user'],
-        template: '<li class="list-group-item"><i class="glyphicon glyphicon-user">&nbsp&nbsp{{user.nickname}}</i></li>',
+        template: '<li class="list-group-item"><i class="glyphicon glyphicon-user userI">&nbsp&nbsp{{user.nickname}}</i><span class="typing">{{user.status}}</span></li>',
       })
       var vm =new Vue({
         el: '#message',
@@ -110,7 +110,15 @@
               var chat = document.getElementById('chatscroll');
               chat.scrollTop = chat.scrollHeight;
             })
-          }       
+          },
+          message(){
+            socket.emit('typing',this.nickname);
+              setTimeout(function(){
+                socket.emit('stopTyping',vm.nickname);
+              },
+              5000);
+          },
+            deep: true    
         },
         methods:{
           addMessage: function(){
@@ -149,21 +157,40 @@
         vm.chatmsgs.push({msg: 'Welcome' + '[' + msg + ']',time: vm.getDate(),user: "系统消息"});
         vm.onlineNum = num;
       });
+
       socket.on('chat message', function(msg,nickname){
         vm.chatmsgs.push({id: vm.nextId++ ,msg: msg, time: vm.getDate(), user: nickname});
       });
+
+      socket.on('typing', function(nickname){
+        var info = vm.users.find(function(value){
+          return value.nickname === nickname;
+        });
+        Vue.set(info, 'status', '正在输入');
+      });
+
+      socket.on('stopTyping', function(nickname){
+        var info = vm.users.find(function(value){
+          return value.nickname === nickname;
+        });
+        Vue.set(info, 'status', '');
+      });
+
       socket.on('onlineuser', function(onlineUser){
         vm.users = onlineUser;
       });
+
       socket.on('sendfile', function(nickname, filename){
         var msg = '文件:  <a href="/files/'+ filename + '"' + '>' + filename +'</a>'
         vm.chatmsgs.push({msg: msg, time: vm.getDate(), user: nickname});
       });
+
       socket.on('userleft', function(msg, onlineUser, num){
         vm.chatmsgs.push({msg : '[' + msg + ']' + '下线了', time: vm.getDate(),user: "系统消息"});
         vm.users = onlineUser;
         vm.onlineNum = num;
       });
+
       socket.on('disconnect', function(){
         console.log('用户已离线');
       });

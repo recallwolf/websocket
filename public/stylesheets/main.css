@@ -13,6 +13,14 @@ body{
 	height: 400px;
 	overflow-y: auto;
 }
+.userI{
+	width: 110px;
+	overflow: hidden;
+}
+.typing{
+	position: absolute;
+	left: 140px;
+}
 .online{
 	position: relative;
 	left: 65%;
@@ -69,4 +77,3 @@ body{
 	background-color: #bdc3c7;
 	border-radius: 3px;
 }
-
