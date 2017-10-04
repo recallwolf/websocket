@@ -118,7 +118,9 @@
               },
               5000);
           },
-            deep: true    
+          users(){
+            this.onlineNum = this.users.length;
+          } 
         },
         methods:{
           addMessage: function(){
@@ -153,9 +155,9 @@
       })
       
 
-      socket.on('online', function(msg,num){
+      socket.on('online', function(msg  /*,num*/){
         vm.chatmsgs.push({msg: 'Welcome' + '[' + msg + ']',time: vm.getDate(),user: "系统消息"});
-        vm.onlineNum = num;
+        //vm.onlineNum = num;
       });
 
       socket.on('chat message', function(msg,nickname){
@@ -185,10 +187,10 @@
         vm.chatmsgs.push({msg: msg, time: vm.getDate(), user: nickname});
       });
 
-      socket.on('userleft', function(msg, onlineUser, num){
+      socket.on('userleft', function(msg, onlineUser  /*, num*/){
         vm.chatmsgs.push({msg : '[' + msg + ']' + '下线了', time: vm.getDate(),user: "系统消息"});
         vm.users = onlineUser;
-        vm.onlineNum = num;
+        //vm.onlineNum = num;
       });
 
       socket.on('disconnect', function(){
