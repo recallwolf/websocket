@@ -11,6 +11,10 @@ app.get('/', function(req, res){
 	res.render('index');
 });
 
+var time = function(){
+  return new Date().toLocaleTimeString();
+}
+
 var onlineUser = [];
 //var num = 0;
 
@@ -18,11 +22,11 @@ io.on('connection', function(socket){
 	socket.on('online',function(msg){
 		//num++;
 		socket.name = msg;
-		io.emit('online', msg  /*,num*/);
+		io.emit('online', msg, time()  /*,num*/);
 	});
 
   socket.on('chat message', function(msg,nickname){
-    io.emit('chat message', msg,nickname);
+    io.emit('chat message', msg, nickname, time());
   });
 
   socket.on('typing', function(nickname){
@@ -35,7 +39,7 @@ io.on('connection', function(socket){
 
   socket.on('onlineuser', function(nickname){
   	onlineUser.push({nickname: nickname});
-    io.emit('onlineuser',onlineUser);
+    io.emit('onlineuser', onlineUser);
   });
 
   socket.on('sendfile', function(nickname,file,filename){
@@ -43,7 +47,7 @@ io.on('connection', function(socket){
   	var filePath = path.resolve(__dirname, rawPath);
     console.log(filePath);
   	fs.writeFileSync(filePath, file, 'binary');
-  	io.emit('sendfile', nickname, filename);
+  	io.emit('sendfile', nickname, filename, time());
   });
 
   socket.on('disconnect', function(){
@@ -56,7 +60,7 @@ io.on('connection', function(socket){
   			onlineUser.splice(index, 1);
   			console.log(onlineUser);
   		}
-		  socket.broadcast.emit('userleft', socket.name,onlineUser  /*,num*/);
+		  socket.broadcast.emit('userleft', socket.name, onlineUser, time()  /*,num*/);
 		}
   });
 });

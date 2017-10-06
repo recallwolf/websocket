@@ -17,13 +17,15 @@ body{
 	width: 110px;
 	overflow: hidden;
 }
+.name{
+	margin-left: 30px;
+}
 .typing{
-	position: absolute;
-	left: 140px;
+	margin-left: 10%;
 }
 .online{
 	position: relative;
-	left: 65%;
+	left: 60%;
 }
 .chat{
 	height: 563px;
