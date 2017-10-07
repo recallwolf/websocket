@@ -11,6 +11,8 @@ app.get('/', function(req, res){
 	res.render('index');
 });
 
+process.env.TZ = 'Asia/Shanghai';
+
 var time = function(){
   return new Date().toLocaleTimeString();
 }
