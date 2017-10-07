@@ -94,7 +94,7 @@
 
       Vue.component('chat', {
         props: ['chatmsg'],
-        template: '<div class="chat-content-others col-sm-11"><div class="chat-content-heading-others"><span class="label label-info span-style-others">&nbsp{{chatmsg.user}}</i></span> <span class="label label-danger span-style-others">&nbsp{{chatmsg.time}}</span></div><div class="chat-content-body" v-html="chatmsg.msg">{{chatmsg.msge}}</div></div>',
+        template: '<div class="chat-content-others col-sm-11"><div class="chat-content-heading-others"><span class="label label-info span-style-others">&nbsp{{chatmsg.user}}</span> <span class="label label-danger span-style-others">&nbsp{{chatmsg.time}}</span></div><div class="chat-content-body" v-html="chatmsg.msg">{{chatmsg.msge}}</div></div>',
       })
       
       Vue.component('chatman',{
@@ -207,7 +207,7 @@
 
       socket.on('sendfile', function(nickname, filename,time){
         var msg = '文件:  <a href="/files/'+ filename + '"' + '>' + filename +'</a>'
-        vm.chatmsgs.push({msg: msg, time: vm.getDate(), user: nickname, time: time});
+        vm.chatmsgs.push({msg: msg, user: nickname, time: time});
       });
 
       socket.on('userleft', function(msg, onlineUser, time  /*, num*/){
