@@ -14,11 +14,12 @@ body{
 	overflow-y: auto;
 }
 .userI{
-	width: 110px;
+	width: 130px;
+	height: 15px;
 	overflow: hidden;
 }
-.name{
-	margin-left: 30px;
+.name{	
+	margin-left: 10%;
 }
 .typing{
 	margin-left: 10%;
